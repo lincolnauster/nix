@@ -7,3 +7,6 @@
   implemented.
 
 * `nix store ping` now reports the version of the remote Nix daemon.
+
+* `:load-flake` repl command will use the current working directory if none is
+  specified.

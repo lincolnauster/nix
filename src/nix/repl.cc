@@ -623,7 +623,9 @@ void NixRepl::loadFile(const Path & path)
 
 void NixRepl::loadFlake(const std::string & flakeRefS)
 {
-    auto flakeRef = parseFlakeRef(flakeRefS, absPath("."), true);
+    auto flakeRefP = flakeRefS.empty() ? std::string(".") : flakeRefS;
+    auto flakeRef = parseFlakeRef(flakeRefP, absPath("."), true);
+
     if (evalSettings.pureEval && !flakeRef.input.isImmutable())
         throw Error("cannot use ':load-flake' on mutable flake reference '%s' (use --impure to override)", flakeRefS);
 
