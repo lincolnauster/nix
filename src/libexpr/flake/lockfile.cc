@@ -185,8 +185,15 @@ std::string LockFile::to_string() const
 
 LockFile LockFile::read(const Path & path)
 {
-    if (!pathExists(path)) return LockFile();
-    return LockFile(nlohmann::json::parse(readFile(path)), path);
+    LockFile l;
+    if (!pathExists(path)) l = LockFile();
+    else try {
+        l = LockFile(nlohmann::json::parse(readFile(path)), path);
+    } catch (const nlohmann::json::parse_error & e) {
+        throw Error("the lockfile did not contain valid JSON.");
+    }
+
+    return l;
 }
 
 std::ostream & operator <<(std::ostream & stream, const LockFile & lockFile)
